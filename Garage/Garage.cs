@@ -129,9 +129,21 @@ namespace Garage
             int pagesize = 5;
             Console.Write($"Ange hur många fordon du vill visa åt gången ({pagesize}): ");
             string s = Console.ReadLine()?.Trim() ?? throw new IOException();
-            if (int.TryParse(s, out int n) && n > 0)
+            if (int.TryParse(s, out int n))
             {
-                pagesize = n;
+                if (n > 0)
+                {
+                    pagesize = n;
+                }
+                else
+                {
+                    Console.WriteLine("Värdet 0 angivet. Avbryter.");
+                    return;
+                }
+            }
+            else
+            {
+                Console.WriteLine("Ogiltigt värde angivet. Använder det föreslagna värdet: 5");
             }
 
             ListVehiclesInPages(vehicles, pagesize);
@@ -649,17 +661,17 @@ namespace Garage
                     return;
                 }
                 // Detta skulle ha varit en array om det hade varit tillåtet.
-                List<string> vals = [.. s.Split(" ", StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries)];
-                for (int i = 0; i < vals.Count; i++)
+                List<string> values = [.. s.Split(" ", StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries)];
+                for (int i = 0; i < values.Count; i++)
                 {
-                    if (!availableValues.Contains(vals[i]))
+                    if (!availableValues.Contains(values[i]))
                     {
-                        Console.WriteLine($"Värdet {vals[i]} finns inte bland de möjliga värdena.");
+                        Console.WriteLine($"Värdet {values[i]} finns inte bland de möjliga värdena.");
                         Console.WriteLine("Eftersom värdet inte skulle matcha några fordon har det ignorerats.");
                     }
                     else
                     {
-                        searchValues.Add(property, vals[i]);
+                        searchValues.Add(property, values[i]);
                     }
                 }
             }

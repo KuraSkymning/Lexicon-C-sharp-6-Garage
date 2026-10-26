@@ -136,6 +136,12 @@ namespace Garage
                 List<string> values = [.. s.Split()];
                 for (int i = 0; i < values.Count; i++)
                 {
+                    if (values[i] == "alla")
+                    {
+                        vehicleTypes = allTypes;
+                        break;
+                    }
+
                     VehicleType? vt = Vehicle.GetVehicleType(values[i]);
                     if (vt == null)
                     {
