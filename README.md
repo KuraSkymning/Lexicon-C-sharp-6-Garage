@@ -1,4 +1,66 @@
-﻿# Garaget 2.0
+﻿# Review av Garaget 2.0
+
+Menyn hanteras av klassen `Menu`, som innehåller en lista av `MenuItem`:s.
+`MenuItem` är en struct som förutom texten att visa och tecken för att välja menyvalet
+även innehåller en referens till en funktion som ska utföras när detta menyval väljs.
+Denna funktion kan returnera en referens till en ny meny att visa efteråt,
+om inte samma meny ska visas igen.
+`MenuItem` innehåller även en funktion som ska returnera `true` eller `false` beroende på
+om menyvalet är tillgängligt att välja eller inte.
+
+`Menu.Show()` visar menyns alternativ och väntar på att användaren väljer ett menyval.
+När användaren har valt ett menyval utförs motsvarande funktion
+och efteråt visas samma eller nästa meny, beroende på om funktionen returnerar en meny eller inte.
+Menyn loopas tills ett exception kastas.
+
+Det finns två instanser av `Menu` i programmet,
+en för att hantera flera garage, och en för att hantera ett enskilt garage.
+
+Hanteringen av flera garage utförs av klassen `GarageList`.
+Den har bland annat metoder för att skapa och ta bort garagen via användarinput.
+
+Ett enskilt garage hanteras av klassen `Garage`.
+I `Garage` finns bland annat fältet `_vehicles` som är en lista över parkerade fordon,
+egenskapen `Capacity` som anger hur många platser det finns i garaget,
+`FreeCapacity` som anger hur många platser som är lediga,
+`Count` som anger hur många fordon som är parkerade,
+och
+`AllowedVehicles` som anger vilka fordonstyper som är tillåtna i garaget.
+
+`Garage` har bland annat metoder för att lista garage, söka i garage,
+lägga till eller ta bort fordon och lägga till slumpmässiga fordon.
+För flera av funktionerna finns det en särskild metod för användarinput,
+dessa metoder har inga inparametrar,
+och en motsvarande metod med inparametrar som anropas av den andra metoden
+när användarens input har lästs in.
+
+Hur `Vehicle` och dess underklasser fungerar var ju tämligen strikt bestämt
+i uppgiften, så jag tror inte jag behöver nämna så mycket om det.
+
+Jag har ett par egna collections:
+`StringDictionary` en dictionary från strängar till mängder av strängar,
+och `StringSet`, en mängd av strängar.
+Dessa använda främst för att hantera sökvärden.
+
+För att starta programmet kan man skriva `dotnet run`.
+
+## Särskilda saker ni kan ge feedback på
+
+* I några fall använder jag mig av try-catch-block för felhantering,
+genom att låta property-setters kontrollera om värdena är korrekta,
+och om det blir ett exception skriver jag ut felmeddelandet från detta exception.
+Tycker ni att det istället hade varit bättra att kontrollera värdena innan
+jag sätter dem? Då hade jag sluppit använda try-catch-block.
+
+* En sak som jag själv inte riktigt gillar i min lösning är hur jag har implementerat
+`GetPropertyValue()` i fordonsklasserna. Jag har gjort det med try-catch-block, vilket
+jag gärna hade undvikit.
+
+* Jag kommer för tillfället inte på så mycket mer att fråga efter feedback om.
+
+# Ursprunglig Readme-text följer nedan:
+
+# Garaget 2.0
 
 Detta är en lösning på en övningsuppgift under en kurs i .NET fullstackutveckling hos Lexicon.
 Den följande texten är baserad på den ursprungliga uppgiftslydelsen.
