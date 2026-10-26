@@ -71,7 +71,7 @@ namespace Garage
         // Lista fordon.
         public static void ListVehicles(List<Vehicle> vehicles)
         {
-            Console.WriteLine("Vill du lista fordonen med 1: kompakt format, eller 2: långt format?");
+            Console.WriteLine("Vill du lista fordonen med (1) kompakt format, eller (2) långt format?");
             bool verbose;
             while (true)
             {
@@ -603,17 +603,16 @@ namespace Garage
             }
         }
 
-        // Ta emot sökvärdet för en fordonsegenskap via användarinput.
+        // Ta emot sökvärden för en fordonsegenskap via användarinput.
         public static void InputSearchProperty(string property, StringDictionary properties,
             StringDictionary searchValues)
         {
-            StringSet? values = properties.Get(property);
-            if (values != null && values.Count > 0)
+            StringSet? available = properties.Get(property);
+            if (available != null && available.Count > 0)
             {
-                Console.WriteLine("Vald egenskap: " + property);
-                Console.Write($"Möjliga värden: ");
+                Console.Write($"Möjliga värden för {property}: ");
                 const int maxDisplayed = 50;
-                List<string> availableValues = values.Values();
+                List<string> availableValues = available.Values();
                 availableValues.Sort(_comparer);
                 int length = Math.Min(availableValues.Count, maxDisplayed);
 
@@ -641,30 +640,28 @@ namespace Garage
 
                 Console.WriteLine();
 
-                bool hasValues = false;
-                while (true)
+                Console.WriteLine($"Om du vill ange flera sökvärden, separera dem med mellanslag.");
+                Console.Write($"Ange ett eller flera sökvärden för {property}: ");
+                string s = Console.ReadLine()?.Trim().ToLower() ?? throw new IOException();
+                if (s == "")
                 {
-                    Console.Write($"Ange ett{(hasValues ? " till" : "")} sökvärde för {property}: ");
-                    string s = Console.ReadLine()?.Trim().ToLower() ?? throw new IOException();
-                    if (s == "")
+                    Console.WriteLine("Inget värde angivet.");
+                    return;
+                }
+                // Detta skulle ha varit en array om det hade varit tillåtet.
+                List<string> vals = [.. s.Split(" ", StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries)];
+                for (int i = 0; i < vals.Count; i++)
+                {
+                    if (!availableValues.Contains(vals[i]))
                     {
-                        break;
-                    }
-                    if (!values.Contains(s))
-                    {
-                        Console.WriteLine("Det angivna värdet finns inte bland de möjliga värdena.");
+                        Console.WriteLine($"Värdet {vals[i]} finns inte bland de möjliga värdena.");
                         Console.WriteLine("Eftersom värdet inte skulle matcha några fordon har det ignorerats.");
                     }
                     else
                     {
-                        searchValues.Add(property, s);
-                        hasValues = true;
+                        searchValues.Add(property, vals[i]);
                     }
                 }
-            }
-            else
-            {
-                Console.WriteLine($"{property}: Inga värden tillgängliga.");
             }
         }
 
@@ -689,7 +686,11 @@ namespace Garage
             Console.WriteLine("Om du anger flera värden för samma egenskap får du matchningar\nsom stämmer överens med något av värdena.");
             Console.WriteLine("Tryck Enter när du inte vill ange fler sökvärden.");
 
-            Console.WriteLine("Vänta, förbereder sökning...");
+            if (_vehicles.Count > 70)
+            {
+                Console.WriteLine("Vänta, förbereder sökning...");
+            }
+
             StringDictionary properties = new();
             for (int i = 0; i < _vehicles.Count; i++)
             {

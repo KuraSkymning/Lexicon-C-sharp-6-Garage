@@ -107,7 +107,7 @@ namespace Garage
             }
 
             Console.WriteLine("Vilka fordonstyper får stå i garaget?");
-            Console.WriteLine("För att ange tillåtna fordonstyper skriv dem med mellanslag mellan.");
+            Console.WriteLine("Om flera fordonstyper ska vara tillåtna, separera dem med mellanslag.");
             Console.WriteLine("För att tillåta alla fordonstyper, skriv ordet alla.");
 
             List<VehicleType> allTypes = [.. Enum.GetValues<VehicleType>()];
@@ -144,7 +144,10 @@ namespace Garage
                     }
                     else
                     {
-                        vehicleTypes.Add((VehicleType)vt);
+                        if (!vehicleTypes.Contains((VehicleType)vt))
+                        {
+                            vehicleTypes.Add((VehicleType)vt);
+                        }
                     }
                 }
             }
