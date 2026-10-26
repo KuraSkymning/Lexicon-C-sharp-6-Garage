@@ -76,7 +76,7 @@ namespace Garage
                             Console.WriteLine();
                             Console.WriteLine("Tryck Enter för att fortsätta.");
                             Console.ReadLine();
-                            Console.Clear();
+                            //Console.Clear();
                             break;
                         }
                     }
